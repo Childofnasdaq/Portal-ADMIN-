@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHILD OF NASDAQ - Authentication</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Login to CHILD OF NASDAQ</h2>
+        <form id="auth-form">
+            <input type="text" id="mentor-id" placeholder="Enter Mentor ID" required>
+            <input type="email" id="email" placeholder="Enter Email" required>
+            <input type="text" id="license-key" placeholder="Enter License Key" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message" style="color:red; display:none;">Invalid credentials, please try again.</p>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
