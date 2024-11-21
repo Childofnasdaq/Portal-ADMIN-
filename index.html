@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+</head>
+<body>
+    <h2>Admin Portal</h2>
+
+    <!-- Register Form -->
+    <form id="registerForm">
+        <input type="email" id="registerEmail" placeholder="Email" required>
+        <input type="password" id="registerPassword" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+    <p id="registerMentorID"></p>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <p id="loginMentorID"></p>
+
+    <!-- Profile Update Form -->
+    <form id="profileForm">
+        <input type="text" id="robotName" placeholder="Robot Name" required>
+        <input type="file" id="profilePicture" accept="image/*" required>
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <!-- License Generation Form -->
+    <form id="licenseForm">
+        <input type="text" id="subscriptionDuration" placeholder="Subscription Duration" required>
+        <button type="submit">Generate License Key</button>
+    </form>
+    <p id="generatedLicenseKey"></p>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            const res = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            document.getElementById('registerMentorID').innerText = 'Mentor ID: ' + data.mentorID;
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('loginMentorID').innerText = 'Logged in! Mentor ID: ' + data.mentorID;
+            } else {
+                alert(data.message);
+            }
+        });
+
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const robotName = document.getElementById('robotName').value;
+            const profilePicture = document.getElementById('profilePicture').files[0];
+
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('robotName', robotName);
+            formData.append('profilePicture', profilePicture);
+
+            const res = await fetch('/updateProfile', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Profile updated!');
+            } else {
+                alert(data.message);
+            }
+        });
+
+        document.getElementById('licenseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const subscriptionDuration = document.getElementById('subscriptionDuration').value;
+
+            const res = await fetch('/generateLicense', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, subscriptionDuration })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('generatedLicenseKey').innerText = 'License Key: ' + data.licenseKey;
+            } else {
+                alert(data.message);
+            }
+        });
+    </script>
+</body>
+</html>
